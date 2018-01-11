@@ -15,6 +15,9 @@ namespace SerwerTcpOkienkowy
 {
     public partial class Form1 : Form
     {
+
+        public string time = DateTime.Now.ToString("h:mm:ss");
+
         public Form1()
         {
             InitializeComponent();
@@ -22,18 +25,20 @@ namespace SerwerTcpOkienkowy
 
         private void startButton_Click(object sender, EventArgs e)
         {
+            // Connection string to database
             string connectionString = String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};", ipBazyDanychTextBox.Text , nazwaBazyDanychtextBox.Text , loginTextBox.Text , hasłoTextBox.Text);
-            listBox1.Items.Add(connectionString);
+            //listBox1.Items.Add(connectionString);
 
+            // Database connection
             MySqlDatabase dbConnection = new MySqlDatabase();
             bool status = dbConnection.OpenConnection(connectionString);
 
             TcpListener server = null;
-            MySqlDatabase conn = new MySqlDatabase();
+
             try
             {
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
-                // Set the TcpListener on port 13000.
+                // Set the TcpListener on port 5000.
                 Int32 port = 5000;
                 IPAddress localAddr = IPAddress.Parse("127.0.0.1");
 
@@ -42,7 +47,8 @@ namespace SerwerTcpOkienkowy
 
                 // Start listening for client requests.
                 server.Start();
-
+                listBox2.Items.Add(time + " Serwer uruchomiony ");
+                listBox2.Refresh();
                 // Buffer for reading data
                 Byte[] bytes = new Byte[256];
                 String data = null;
@@ -52,12 +58,15 @@ namespace SerwerTcpOkienkowy
                 // Enter the listening loop.
                 while (true)
                 {
-                    Console.Write("Waiting for a connection... ");
+                    listBox2.Items.Add(time + " Czekam na połączenia... ");
+                    listBox2.Refresh();
 
                     // Perform a blocking call to accept requests.
                     // You could also user server.AcceptSocket() here.
                     TcpClient client = server.AcceptTcpClient();
-                    Console.WriteLine("Connected!");
+                    IPEndPoint IP = (IPEndPoint)client.Client.RemoteEndPoint;
+                    listBox2.Items.Add(time + " Klient połączony" + "[" + IP.ToString() + "]");
+                    listBox2.Refresh();
 
                     // Get a stream object for reading and writing
                     NetworkStream stream = client.GetStream();
@@ -68,7 +77,12 @@ namespace SerwerTcpOkienkowy
                     while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                     {
                         string query = System.Text.Encoding.UTF8.GetString(bytes, 0, i);
-                        Console.WriteLine("Received query: {0}", query);
+                       
+                        listBox1.Items.Add("[" + time + "] " + "[" + IP.ToString() + "] :Nawiązano połączenie");
+                        listBox1.Refresh();
+                        listBox1.Items.Add("[" + time + "] " + "Zapytanie" + query);
+                        listBox1.Refresh();
+
 
                         // Process the data sent by the client.
                         var ds = dbConnection.getDataSet(query);
@@ -76,7 +90,8 @@ namespace SerwerTcpOkienkowy
                         // Send back a response.
                         binaryFormatter.Serialize(stream, ds);
 
-                        Console.WriteLine("Sent.");
+                        listBox2.Items.Add(time + " Wysłano dane do klienta ");
+                        listBox2.Refresh();
                     }
 
                     // Shutdown and end connection
@@ -85,19 +100,18 @@ namespace SerwerTcpOkienkowy
             }
             catch (SocketException ex)
             {
-                Console.WriteLine("SocketException: {0}", ex);
+                MessageBox.Show("SocketException: " + ex);
             }
             finally
             {
                 // Stop listening for new clients.
                 server.Stop();
-
+                // Stop connection to database
                 dbConnection.CloseConnection();
             }
 
 
-            Console.WriteLine("\nHit enter to continue...");
-            Console.Read();
+            
 
 
 
@@ -114,22 +128,20 @@ namespace SerwerTcpOkienkowy
             if (status == true)
             {
                 MessageBox.Show("Nawiązałeś połączenie z bazą danych ", "Testowe połączenie do bazy");
-                string time = DateTime.Now.ToString("h:mm:ss tt");
                 listBox2.Items.Add(time + " Nawiązano testowe połączenie z bazą danych");
+                // Stop connection to database
                 dbConnection.CloseConnection();
             }
             else
             {
                 MessageBox.Show(@"Nie nawiązano testowego połączenia z bazą danych ", "Testowe połączenie do bazy");
-
-                string time = DateTime.Now.ToString("h:mm:ss tt");
                 listBox2.Items.Add(time + " Nie nawiązano testowego połączenia z bazą danych");
             }
+           
 
-            
 
-            
-            
+
+
         }
     }
 }
