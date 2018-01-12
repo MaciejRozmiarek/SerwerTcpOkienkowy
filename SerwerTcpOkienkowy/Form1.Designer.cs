@@ -32,18 +32,15 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.listBox2 = new System.Windows.Forms.ListBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.startButton = new System.Windows.Forms.Button();
-            this.stopButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.msServerCheckBox = new System.Windows.Forms.CheckBox();
             this.ipBazyDanychTextBox = new System.Windows.Forms.TextBox();
             this.oracleCheckBox = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.nazwaBazyDanychtextBox = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.ipSerweraTextBox = new System.Windows.Forms.TextBox();
             this.mysqlCheckBox = new System.Windows.Forms.CheckBox();
             this.hasłoTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -52,13 +49,16 @@
             this.label5 = new System.Windows.Forms.Label();
             this.loginTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.stopButton = new System.Windows.Forms.Button();
+            this.startButton = new System.Windows.Forms.Button();
+            this.listBox2 = new System.Windows.Forms.ListBox();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -108,47 +108,6 @@
             this.panel1.Size = new System.Drawing.Size(341, 431);
             this.panel1.TabIndex = 3;
             // 
-            // listBox2
-            // 
-            this.listBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.Location = new System.Drawing.Point(3, 440);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(341, 123);
-            this.listBox2.TabIndex = 4;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.stopButton);
-            this.groupBox1.Controls.Add(this.startButton);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(3, 363);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(335, 65);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            // 
-            // startButton
-            // 
-            this.startButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.startButton.Location = new System.Drawing.Point(3, 16);
-            this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(329, 23);
-            this.startButton.TabIndex = 0;
-            this.startButton.Text = "Start";
-            this.startButton.UseVisualStyleBackColor = true;
-            this.startButton.Click += new System.EventHandler(this.startButton_Click);
-            // 
-            // stopButton
-            // 
-            this.stopButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.stopButton.Location = new System.Drawing.Point(3, 39);
-            this.stopButton.Name = "stopButton";
-            this.stopButton.Size = new System.Drawing.Size(329, 23);
-            this.stopButton.TabIndex = 1;
-            this.stopButton.Text = "Stop";
-            this.stopButton.UseVisualStyleBackColor = true;
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.button1);
@@ -158,7 +117,7 @@
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.nazwaBazyDanychtextBox);
-            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Controls.Add(this.ipSerweraTextBox);
             this.groupBox2.Controls.Add(this.mysqlCheckBox);
             this.groupBox2.Controls.Add(this.hasłoTextBox);
             this.groupBox2.Controls.Add(this.label4);
@@ -174,6 +133,16 @@
             this.groupBox2.Size = new System.Drawing.Size(341, 431);
             this.groupBox2.TabIndex = 16;
             this.groupBox2.TabStop = false;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(162, 285);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(145, 23);
+            this.button1.TabIndex = 31;
+            this.button1.Text = "Test połączenia do bazy";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // msServerCheckBox
             // 
@@ -231,12 +200,13 @@
             this.nazwaBazyDanychtextBox.TabIndex = 24;
             this.nazwaBazyDanychtextBox.Text = "mysql";
             // 
-            // textBox1
+            // ipSerweraTextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(102, 30);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(233, 20);
-            this.textBox1.TabIndex = 16;
+            this.ipSerweraTextBox.Location = new System.Drawing.Point(102, 30);
+            this.ipSerweraTextBox.Name = "ipSerweraTextBox";
+            this.ipSerweraTextBox.Size = new System.Drawing.Size(233, 20);
+            this.ipSerweraTextBox.TabIndex = 16;
+            this.ipSerweraTextBox.Text = "127.0.0.1";
             // 
             // mysqlCheckBox
             // 
@@ -269,9 +239,19 @@
             // numericUpDown1
             // 
             this.numericUpDown1.Location = new System.Drawing.Point(102, 56);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(233, 20);
             this.numericUpDown1.TabIndex = 17;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
             // 
             // label2
             // 
@@ -308,15 +288,46 @@
             this.label1.TabIndex = 18;
             this.label1.Text = "IP SERWERA";
             // 
-            // button1
+            // groupBox1
             // 
-            this.button1.Location = new System.Drawing.Point(162, 285);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(145, 23);
-            this.button1.TabIndex = 31;
-            this.button1.Text = "Test połączenia do bazy";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.groupBox1.Controls.Add(this.stopButton);
+            this.groupBox1.Controls.Add(this.startButton);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.groupBox1.Location = new System.Drawing.Point(3, 363);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(335, 65);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            // 
+            // stopButton
+            // 
+            this.stopButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.stopButton.Location = new System.Drawing.Point(3, 39);
+            this.stopButton.Name = "stopButton";
+            this.stopButton.Size = new System.Drawing.Size(329, 23);
+            this.stopButton.TabIndex = 1;
+            this.stopButton.Text = "Stop";
+            this.stopButton.UseVisualStyleBackColor = true;
+            // 
+            // startButton
+            // 
+            this.startButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.startButton.Location = new System.Drawing.Point(3, 16);
+            this.startButton.Name = "startButton";
+            this.startButton.Size = new System.Drawing.Size(329, 23);
+            this.startButton.TabIndex = 0;
+            this.startButton.Text = "Start";
+            this.startButton.UseVisualStyleBackColor = true;
+            this.startButton.Click += new System.EventHandler(this.startButton_Click);
+            // 
+            // listBox2
+            // 
+            this.listBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBox2.FormattingEnabled = true;
+            this.listBox2.Location = new System.Drawing.Point(3, 440);
+            this.listBox2.Name = "listBox2";
+            this.listBox2.Size = new System.Drawing.Size(341, 123);
+            this.listBox2.TabIndex = 4;
             // 
             // Form1
             // 
@@ -329,10 +340,10 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel1.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -354,7 +365,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox nazwaBazyDanychtextBox;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox ipSerweraTextBox;
         private System.Windows.Forms.CheckBox mysqlCheckBox;
         private System.Windows.Forms.TextBox hasłoTextBox;
         private System.Windows.Forms.Label label4;

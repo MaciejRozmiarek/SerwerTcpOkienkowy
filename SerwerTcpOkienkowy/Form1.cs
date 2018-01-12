@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Net.Sockets;
 using System.Net;
+using System.Threading;
 
 namespace SerwerTcpOkienkowy
 {
@@ -25,6 +26,11 @@ namespace SerwerTcpOkienkowy
 
         private void startButton_Click(object sender, EventArgs e)
         {
+
+            Thread t = new Thread(startServer);
+            t.Start();
+
+            /*
             // Connection string to database
             string connectionString = String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};", ipBazyDanychTextBox.Text , nazwaBazyDanychtextBox.Text , loginTextBox.Text , hasłoTextBox.Text);
             //listBox1.Items.Add(connectionString);
@@ -113,7 +119,7 @@ namespace SerwerTcpOkienkowy
 
             
 
-
+    */
 
         }
 
@@ -143,5 +149,132 @@ namespace SerwerTcpOkienkowy
 
 
         }
+
+        public void startServer()
+        {
+
+
+            // Connection string to database
+            string connectionString = String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3};", ipBazyDanychTextBox.Text, nazwaBazyDanychtextBox.Text, loginTextBox.Text, hasłoTextBox.Text);
+            //listBox1.Items.Add(connectionString);
+
+            // Database connection
+            MySqlDatabase dbConnection = new MySqlDatabase();
+            bool status = dbConnection.OpenConnection(connectionString);
+
+            TcpListener server = null;
+
+            try
+            {
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                // Set the TcpListener on port.
+                Int32 port = System.Convert.ToInt16(numericUpDown1.Value);
+                IPAddress localAddr = IPAddress.Parse(ipSerweraTextBox.Text);
+
+                // TcpListener server = new TcpListener(port);
+                server = new TcpListener(localAddr, port);
+
+                // Start listening for client requests.
+                server.Start();
+
+                listBox2.Invoke(new Action(delegate ()
+                {
+                    listBox2.Items.Add(time + " Serwer uruchomiony ");
+                    listBox2.Refresh();
+                }));
+
+                // Buffer for reading data
+                Byte[] bytes = new Byte[256];
+                String data = null;
+
+
+
+                // Enter the listening loop.
+                while (true)
+                {
+                    listBox2.Invoke(new Action(delegate ()
+                    {
+                        listBox2.Items.Add(time + " Czekam na połączenia... ");
+                        listBox2.Refresh();
+                    }));
+
+
+                    // Perform a blocking call to accept requests.
+                    // You could also user server.AcceptSocket() here.
+                    TcpClient client = server.AcceptTcpClient();
+                    IPEndPoint IP = (IPEndPoint)client.Client.RemoteEndPoint;
+
+                    listBox2.Invoke(new Action(delegate ()
+                    {
+                        listBox2.Items.Add(time + " Klient połączony z adresu IP " + "[" + IP.ToString() + "]");
+                        listBox2.Refresh();
+                    }));
+                    
+                    // Get a stream object for reading and writing
+                    NetworkStream stream = client.GetStream();
+
+                    int i;
+
+                    // Loop to receive all the data sent by the client.
+                    while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
+                    {
+                        string query = System.Text.Encoding.UTF8.GetString(bytes, 0, i);
+
+
+                        listBox1.Invoke(new Action(delegate ()
+                        {
+                            listBox1.Items.Add("[" + time + "] " + "Podłączony klient z adresu IP " + "[" + IP.ToString() + "]");
+                            listBox1.Refresh();
+                            listBox1.Items.Add("[" + time + "] " + "Zapytanie [ " + query + " ]");
+                            listBox1.Refresh();
+
+                        }));
+
+                        // Process the data sent by the client.
+                        var ds = dbConnection.getDataSet(query);
+                        dataGridView1.Invoke(new Action(delegate ()
+                        {
+
+                            dataGridView1.DataSource = ds.Tables[0].DefaultView;
+                            dataGridView1.Refresh();
+
+                        }));
+                        
+
+                        // Send back a response.
+                        binaryFormatter.Serialize(stream, ds);
+                        listBox1.Invoke(new Action(delegate ()
+                        {
+                            listBox1.Items.Add(time + " Wysłano dane do klienta " + "[" + IP.ToString() + "]");
+                            listBox1.Refresh();
+                        }));
+                        
+                    }
+
+                    // Shutdown and end connection
+                    listBox2.Invoke(new Action(delegate ()
+                    {
+                        listBox2.Items.Add(time + " Klient " + "[" + IP.ToString() + "] rozłączył się");
+                        listBox2.Refresh();
+                    }));
+                    client.Close();
+                }
+            }
+            catch (SocketException ex)
+            {
+
+                MessageBox.Show("SocketException: " + ex);
+            }
+            finally
+            {
+                // Stop listening for new clients.
+                server.Stop();
+                // Stop connection to database
+                dbConnection.CloseConnection();
+            }
+
+
+        }
+
     }
 }
