@@ -262,8 +262,10 @@ namespace SerwerTcpOkienkowy
             }
             catch (SocketException ex)
             {
-
+               
                 MessageBox.Show("SocketException: " + ex);
+
+
             }
             finally
             {

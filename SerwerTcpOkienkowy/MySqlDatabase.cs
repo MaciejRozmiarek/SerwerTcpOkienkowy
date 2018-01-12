@@ -103,7 +103,23 @@ namespace SerwerTcpOkienkowy
         {
             string sqlCmd = Command;
             DataSet DS = new DataSet();
-            //DS = null; 
+            //DS = null;
+            if (sqlCmd == null)
+            {
+                DataTable dt = new DataTable("MyTable");
+
+                dt.Columns.Add(new DataColumn("Błąd", typeof(string)));
+
+                DataRow dr = dt.NewRow();
+
+                dr["Błąd"] = "Podałeś puste zapytanie!!!";
+                dt.Rows.Add(dr);
+                DS.Tables.Add(dt);
+            }
+            else
+            {
+
+            
             if (connectionStatus == true)
             {
                 try
@@ -130,7 +146,7 @@ namespace SerwerTcpOkienkowy
                     dt.Rows.Add(dr);
                     DS.Tables.Add(dt);
                 }
-              
+                }
 
             }
             return DS;
