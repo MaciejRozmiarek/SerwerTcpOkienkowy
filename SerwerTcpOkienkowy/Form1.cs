@@ -65,7 +65,7 @@ namespace SerwerTcpOkienkowy
                     // You could also user server.AcceptSocket() here.
                     TcpClient client = server.AcceptTcpClient();
                     IPEndPoint IP = (IPEndPoint)client.Client.RemoteEndPoint;
-                    listBox2.Items.Add(time + " Klient połączony" + "[" + IP.ToString() + "]");
+                    listBox2.Items.Add(time + " Klient połączony z adresu IP " + "[" + IP.ToString() + "]");
                     listBox2.Refresh();
 
                     // Get a stream object for reading and writing
@@ -78,9 +78,9 @@ namespace SerwerTcpOkienkowy
                     {
                         string query = System.Text.Encoding.UTF8.GetString(bytes, 0, i);
                        
-                        listBox1.Items.Add("[" + time + "] " + "[" + IP.ToString() + "] :Nawiązano połączenie");
+                        listBox1.Items.Add("[" + time + "] " + "Podłączony klient z adresu IP " + "[" + IP.ToString() + "]" );
                         listBox1.Refresh();
-                        listBox1.Items.Add("[" + time + "] " + "Zapytanie" + query);
+                        listBox1.Items.Add("[" + time + "] " + "Zapytanie [ " + query + " ]");
                         listBox1.Refresh();
 
 
@@ -90,7 +90,7 @@ namespace SerwerTcpOkienkowy
                         // Send back a response.
                         binaryFormatter.Serialize(stream, ds);
 
-                        listBox2.Items.Add(time + " Wysłano dane do klienta ");
+                        listBox2.Items.Add(time + " Wysłano dane do klienta " + "[" + IP.ToString() + "]");
                         listBox2.Refresh();
                     }
 

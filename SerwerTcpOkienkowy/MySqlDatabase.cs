@@ -103,17 +103,34 @@ namespace SerwerTcpOkienkowy
         {
             string sqlCmd = Command;
             DataSet DS = new DataSet();
+            //DS = null; 
             if (connectionStatus == true)
             {
+                try
+                {
+                    MySqlCommand cmd = new MySqlCommand(sqlCmd, connection);
+                    cmd.CommandType = CommandType.Text;
+                    // MySqlDataReader rdr = cmd.ExecuteReader();
 
-                MySqlCommand cmd = new MySqlCommand(sqlCmd, connection);
-                cmd.CommandType = CommandType.Text;
-                // MySqlDataReader rdr = cmd.ExecuteReader();
+                    MySqlDataAdapter mySqlDataAdapter = new MySqlDataAdapter(sqlCmd, connection);
 
-                MySqlDataAdapter mySqlDataAdapter = new MySqlDataAdapter(sqlCmd, connection);
+                    mySqlDataAdapter.Fill(DS);
+                    mySqlDataAdapter.Dispose();
+                }
+                catch (Exception ex )
+                {
 
-                mySqlDataAdapter.Fill(DS);
-                mySqlDataAdapter.Dispose();
+                    DataTable dt = new DataTable("MyTable");
+                   
+                    dt.Columns.Add(new DataColumn("Błąd", typeof(string)));
+
+                    DataRow dr = dt.NewRow();
+                    
+                    dr["Błąd"] = ex;
+                    dt.Rows.Add(dr);
+                    DS.Tables.Add(dt);
+                }
+              
 
             }
             return DS;
