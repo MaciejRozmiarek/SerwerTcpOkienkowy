@@ -101,7 +101,12 @@ namespace SerwerTcpOkienkowy
 
         public DataSet getDataSet(string Command)
         {
+
             string sqlCmd = Command;
+
+            var firstWord = sqlCmd.Substring(0, sqlCmd.IndexOf(" "));
+
+
             DataSet DS = new DataSet();
             //DS = null;
             if (sqlCmd == null)
@@ -116,11 +121,38 @@ namespace SerwerTcpOkienkowy
                 dt.Rows.Add(dr);
                 DS.Tables.Add(dt);
             }
-            else
+            else if (firstWord == "SELECT")
             {
+                if (connectionStatus == true)
+                {
+                    try
+                    {
+                        MySqlCommand cmd = new MySqlCommand(sqlCmd, connection);
+                        cmd.CommandType = CommandType.Text;
+                        // MySqlDataReader rdr = cmd.ExecuteReader();
 
-            
-            if (connectionStatus == true)
+                        MySqlDataAdapter mySqlDataAdapter = new MySqlDataAdapter(sqlCmd, connection);
+
+                        mySqlDataAdapter.Fill(DS);
+                        mySqlDataAdapter.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+
+                        DataTable dt = new DataTable("MyTable");
+
+                        dt.Columns.Add(new DataColumn("Błąd", typeof(string)));
+
+                        DataRow dr = dt.NewRow();
+
+                        dr["Błąd"] = ex;
+                        dt.Rows.Add(dr);
+                        DS.Tables.Add(dt);
+                    }
+                }
+
+            }
+            else if (firstWord == "UPDATE")
             {
                 try
                 {
@@ -129,26 +161,80 @@ namespace SerwerTcpOkienkowy
                     // MySqlDataReader rdr = cmd.ExecuteReader();
 
                     MySqlDataAdapter mySqlDataAdapter = new MySqlDataAdapter(sqlCmd, connection);
-
                     mySqlDataAdapter.Fill(DS);
                     mySqlDataAdapter.Dispose();
+                    DataTable dt = new DataTable("MyTable");
+
+                    dt.Columns.Add(new DataColumn("Status wykonania", typeof(string)));
+
+                    DataRow dr = dt.NewRow();
+
+                    dr["Status wykonania"] = "WYKONANO UPDATE";
+                    dt.Rows.Add(dr);
+                    DS.Tables.Add(dt);
                 }
-                catch (Exception ex )
+                catch (Exception ex)
                 {
 
                     DataTable dt = new DataTable("MyTable");
-                   
+
                     dt.Columns.Add(new DataColumn("Błąd", typeof(string)));
 
                     DataRow dr = dt.NewRow();
-                    
+
                     dr["Błąd"] = ex;
                     dt.Rows.Add(dr);
                     DS.Tables.Add(dt);
                 }
-                }
-
             }
+            else if (firstWord == "INSERT")
+            {
+                try
+                {
+                    MySqlCommand cmd = new MySqlCommand(sqlCmd, connection);
+                    cmd.CommandType = CommandType.Text;
+                    // MySqlDataReader rdr = cmd.ExecuteReader();
+
+                    MySqlDataAdapter mySqlDataAdapter = new MySqlDataAdapter(sqlCmd, connection);
+                    mySqlDataAdapter.Fill(DS);
+                    mySqlDataAdapter.Dispose();
+                    DataTable dt = new DataTable("MyTable");
+
+                    dt.Columns.Add(new DataColumn("Status wykonania", typeof(string)));
+
+                    DataRow dr = dt.NewRow();
+
+                    dr["Status wykonania"] = "WYKONANO INSERT";
+                    dt.Rows.Add(dr);
+                    DS.Tables.Add(dt);
+                }
+                catch (Exception ex)
+                {
+
+                    DataTable dt = new DataTable("MyTable");
+
+                    dt.Columns.Add(new DataColumn("Błąd", typeof(string)));
+
+                    DataRow dr = dt.NewRow();
+
+                    dr["Błąd"] = ex;
+                    dt.Rows.Add(dr);
+                    DS.Tables.Add(dt);
+                }
+            }
+            else
+            {
+                DataTable dt = new DataTable("MyTable");
+
+                dt.Columns.Add(new DataColumn("Status wykonania", typeof(string)));
+
+                DataRow dr = dt.NewRow();
+
+                dr["Status wykonania"] = "NIE MOŻNA WYKONAĆ INNY ZAPYTAŃ NIŻ SELECT, UPDATE ORAZ INSERT.";
+                dt.Rows.Add(dr);
+                DS.Tables.Add(dt);
+            }
+
             return DS;
 
         }
