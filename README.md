@@ -22,3 +22,5 @@ Jak przetestować?
 - Otrzymane Dane są serializowane i wysyłane do Clienta
 - Jeżeli Baza Danych zwróciła błąd jest to przesyłane do Clienta.
 
+--
+Wykorzystane rzeczy Wątki, Serializacja, Socket, .Net, Delegaty
